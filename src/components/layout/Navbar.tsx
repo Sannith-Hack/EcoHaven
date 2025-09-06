@@ -207,7 +207,6 @@ export default function Navbar() {
         <div className="sticky top-16 z-40">
           <GuestMessage />
           </div>
-        </div>
       )}
     </>
   )
