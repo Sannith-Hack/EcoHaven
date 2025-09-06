@@ -13,6 +13,7 @@ const mockProducts = [
     description: "Beautiful handcrafted wooden chair in excellent condition. Perfect for dining room or office.",
     price: 75,
     category: "Furniture",
+    image:"/images/image(1).png",
     condition: "Excellent" as const
   },
   {
