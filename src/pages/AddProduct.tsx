@@ -15,6 +15,7 @@ const AddProduct = () => {
     category: "",
     price: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const categories = [
     "Clothing",
@@ -24,8 +25,10 @@ const AddProduct = () => {
     "Household"
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+
     if (!formData.title || !formData.description || !formData.category || !formData.price) {
       toast({
         title: "Error",
@@ -34,19 +37,52 @@ const AddProduct = () => {
       });
       return;
     }
+    
+    // Convert price to a number before sending
+    const productData = {
+      ...formData,
+      price: parseFloat(formData.price)
+    };
 
-    toast({
-      title: "Success!",
-      description: "Product added successfully"
-    });
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('http://localhost:3001/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData),
+      });
 
-    // Reset form
-    setFormData({
-      title: "",
-      description: "",
-      category: "",
-      price: "",
-    });
+      if (!response.ok) {
+        throw new Error('Failed to add product');
+      }
+
+      const result = await response.json();
+      console.log('Product added:', result);
+
+      toast({
+        title: "Success!",
+        description: "Product added successfully"
+      });
+
+      // Reset form on success
+      setFormData({
+        title: "",
+        description: "",
+        category: "",
+        price: "",
+      });
+    } catch (error) {
+      console.error('Submission error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add product. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -111,7 +147,7 @@ const AddProduct = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="price">Price ($)</Label>
+                  <Label htmlFor="price">Price (₹)</Label>
                   <Input
                     id="price"
                     type="number"
@@ -142,8 +178,9 @@ const AddProduct = () => {
                   variant="eco" 
                   size="lg" 
                   className="w-full"
+                  disabled={isSubmitting} // Disable the button while the request is in flight
                 >
-                  Add Product
+                  {isSubmitting ? 'Adding Product...' : 'Add Product'}
                 </Button>
               </form>
             </CardContent>
