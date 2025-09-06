@@ -4,6 +4,10 @@ import { Button } from "@/components/ui/enhanced-button"
 import { Badge } from "@/components/ui/badge"
 import { Heart, ShoppingCart } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { formatPrice } from "@/utils/priceFormatter"
+import { useAuth } from "@/contexts/AuthContext"
+import { useCart } from "@/contexts/CartContext"
+import { useToast } from "@/hooks/use-toast"
 
 interface Product {
   id: string
@@ -17,7 +21,6 @@ interface Product {
 
 interface ProductCardProps {
   product: Product
-  onAddToCart?: (productId: string) => void
   onToggleFavorite?: (productId: string) => void
   isFavorite?: boolean
   className?: string
@@ -25,15 +28,42 @@ interface ProductCardProps {
 
 export default function ProductCard({
   product,
-  onAddToCart,
   onToggleFavorite,
   isFavorite = false,
   className
 }: ProductCardProps) {
+  const { isLoggedIn } = useAuth()
+  const { addToCart } = useCart()
+  const { toast } = useToast()
   const conditionColors = {
     Excellent: "bg-eco-green text-white",
     Good: "bg-eco-sage text-foreground",
     Fair: "bg-eco-earth text-foreground"
+  }
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    if (!isLoggedIn) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to add items to your cart.",
+        variant: "destructive"
+      })
+      return
+    }
+
+    addToCart({
+      id: product.id,
+      title: product.title,
+      price: product.price
+    })
+
+    toast({
+      title: "Item added to cart",
+      description: `${product.title} has been added to your cart.`,
+    })
   }
 
   return (
@@ -86,7 +116,7 @@ export default function ProductCard({
               {product.title}
             </h3>
             <span className="text-lg font-bold text-primary">
-              ${product.price}
+              {formatPrice(product.price)}
             </span>
           </div>
           
@@ -106,19 +136,13 @@ export default function ProductCard({
             </Button>
           </Link>
           
-          {onAddToCart && (
-            <Button
-              variant="eco"
-              size="icon"
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                onAddToCart(product.id)
-              }}
-            >
-              <ShoppingCart className="h-4 w-4" />
-            </Button>
-          )}
+          <Button
+            variant="eco"
+            size="icon"
+            onClick={handleAddToCart}
+          >
+            <ShoppingCart className="h-4 w-4" />
+          </Button>
         </CardFooter>
       </div>
     </Card>

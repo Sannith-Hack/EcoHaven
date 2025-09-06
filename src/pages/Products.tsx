@@ -141,13 +141,12 @@ export default function Products() {
         {filteredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onAddToCart={handleAddToCart}
-                onToggleFavorite={handleToggleFavorite}
-                isFavorite={favorites.includes(product.id)}
-              />
+            <ProductCard
+              key={product.id}
+              product={product}
+              onToggleFavorite={handleToggleFavorite}
+              isFavorite={favorites.includes(product.id)}
+            />
             ))}
           </div>
         ) : (

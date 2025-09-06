@@ -127,7 +127,6 @@ export default function Home() {
               <ProductCard
                 key={product.id}
                 product={product}
-                onAddToCart={(id) => console.log("Add to cart:", id)}
                 onToggleFavorite={(id) => console.log("Toggle favorite:", id)}
               />
             ))}
