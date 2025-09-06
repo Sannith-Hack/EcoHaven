@@ -17,7 +17,7 @@ const MyListings = () => {
       description: "Beautiful vintage leather jacket in excellent condition",
       category: "clothing",
       price: 85.00,
-      image: "/placeholder.svg",
+      image: "/images/image1.png",
       status: "active"
     },
     {
@@ -26,7 +26,7 @@ const MyListings = () => {
       description: "Unlocked iPhone 12 Pro, minor scratches on back",
       category: "electronics",
       price: 650.00,
-      image: "/placeholder.svg",
+      image: "/images/image2.png",
       status: "sold"
     },
     {
@@ -35,7 +35,7 @@ const MyListings = () => {
       description: "Handcrafted wooden coffee table, sustainable oak",
       category: "furniture",
       price: 120.00,
-      image: "/placeholder.svg",
+      image: "/images/image3.png",
       status: "active"
     }
   ]);
