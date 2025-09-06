@@ -53,7 +53,7 @@ export default function Navbar() {
               <Leaf className="h-5 w-5 text-white" />
             </div>
             <span className="text-xl font-bold bg-gradient-eco bg-clip-text text-transparent">
-              EcoFinds
+              EcoHaven
             </span>
           </Link>
 

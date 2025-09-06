@@ -147,7 +147,7 @@ export default function Home() {
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Why Choose EcoFinds?</h2>
+            <h2 className="text-3xl font-bold mb-4">Why Choose EcoHaven?</h2>
             <p className="text-muted-foreground text-lg">
               More than just a marketplace - we're a movement towards sustainability
             </p>

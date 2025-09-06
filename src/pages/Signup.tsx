@@ -44,7 +44,7 @@ const Signup = () => {
       setIsLoading(false);
       toast({
         title: "Account Created!",
-        description: "Welcome to EcoFinds. Please sign in.",
+        description: "Welcome to EcoHaven. Please sign in.",
       });
       navigate("/login");
     }, 1000);
@@ -58,7 +58,7 @@ const Signup = () => {
             <div className="flex justify-center mb-2">
               <Leaf className="h-12 w-12 text-primary" />
             </div>
-            <CardTitle className="text-2xl font-bold">Join EcoMarket</CardTitle>
+            <CardTitle className="text-2xl font-bold">Join EcoHaven</CardTitle>
             <CardDescription>
               Create your account to start shopping sustainably
             </CardDescription>

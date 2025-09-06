@@ -26,7 +26,7 @@ const Login = () => {
       login(); // Update auth state
       toast({
         title: "Login Successful!",
-        description: "Welcome back to EcoFinds",
+        description: "Welcome back to EcoHaven",
       });
       navigate("/");
     }, 1000);
@@ -42,7 +42,7 @@ const Login = () => {
             </div>
             <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
             <CardDescription>
-              Sign in to your EcoFinds account
+              Sign in to your EcoHaven account
             </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
