@@ -12,11 +12,10 @@ const Profile = () => {
   
   // Mock user data - in a real app this would come from API/context
   const [userProfile] = useState({
-    name: "Sarah Johnson",
-    email: "sarah.johnson@email.com",
-    phone: "+1 (555) 123-4567",
-    location: "San Francisco, CA",
-    joinDate: "March 2024",
+    name: "P.Sannith",
+    email: "sunnysunnit@gmai.com",
+    location: "Warangal ,Shivanagar",
+    joinDate: "Sep 2025",
     avatar: "/placeholder.svg",
     stats: {
       itemsSold: 12,
@@ -127,12 +126,6 @@ const Profile = () => {
                   <label className="text-sm font-medium text-muted-foreground">Email Address</label>
                   <p className="text-foreground">{userProfile.email}</p>
                 </div>
-                <Separator />
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground">Phone Number</label>
-                  <p className="text-foreground">{userProfile.phone}</p>
-                </div>
-                <Separator />
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Location</label>
                   <p className="text-foreground">{userProfile.location}</p>
