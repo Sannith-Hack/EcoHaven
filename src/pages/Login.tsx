@@ -1,35 +1,52 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
 import { Leaf, Mail, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [values, setValues] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const { toast } = useToast();
   const { login } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleChanges = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      login(); // Update auth state
+    try {
+      const response = await axios.post("http://localhost:3000/auth/login", values);
+
+      if (response.status === 201) {
+        localStorage.setItem("token", response.data.token);
+        login(); // update auth state
+        toast({
+          title: "Login Successful!",
+          description: "Welcome back to EcoHaven",
+        });
+        navigate("/");
+      }
+    } catch (err) {
       toast({
-        title: "Login Successful!",
-        description: "Welcome back to EcoHaven",
+        title: "Login Failed",
+        description: err.response?.data?.message || "Invalid email or password.",
+        variant: "destructive",
       });
-      navigate("/");
-    }, 1000);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -41,10 +58,9 @@ const Login = () => {
               <Leaf className="h-12 w-12 text-primary" />
             </div>
             <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-            <CardDescription>
-              Sign in to your EcoHaven account
-            </CardDescription>
+            <CardDescription>Sign in to your EcoHaven account</CardDescription>
           </CardHeader>
+
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -52,40 +68,41 @@ const Login = () => {
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
-                    id="email"
                     type="email"
-                    placeholder="your@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter Email"
                     className="pl-10"
+                    name="email"
+                    onChange={handleChanges}
                     required
                   />
                 </div>
               </div>
+
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
-                    id="password"
                     type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter Password"
                     className="pl-10"
+                    name="password"
+                    onChange={handleChanges}
                     required
                   />
                 </div>
               </div>
             </CardContent>
+
             <CardFooter className="flex flex-col space-y-4">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full bg-gradient-to-r from-primary to-eco-green-dark hover:from-eco-green-dark hover:to-primary transition-all duration-300"
                 disabled={isLoading}
               >
                 {isLoading ? "Signing In..." : "Sign In"}
               </Button>
+
               <div className="text-center text-sm">
                 <span className="text-muted-foreground">Don't have an account? </span>
                 <Button
@@ -104,4 +121,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Login;

@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useNavigate } from "react-router-dom";
 import { Leaf, Mail, Lock, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
+
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +27,7 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
@@ -36,7 +38,13 @@ const Signup = () => {
       });
       return;
     }
-
+    try {
+       const response = await axios.post('http://localhost:3000/auth/signup',formData)
+        console.log(response)
+    } catch (err) {
+      console.log(err)
+    }
+   
     setIsLoading(true);
 
     // Simulate API call
