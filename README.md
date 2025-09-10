@@ -1,1 +1,0 @@
-EcoFinds is a sustainable second-hand marketplace prototype enabling secure user authentication, profile creation, and product management (create, edit, delete). Users can browse listings with search and category filters, view product details, add items to cart, and track past purchases. Responsive on web and mobile.
