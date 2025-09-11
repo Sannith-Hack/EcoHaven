@@ -1,3 +1,4 @@
+// EcoHaven-FireBase/client/src/components/layout/Navbar.tsx
 import { useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { Leaf, ShoppingCart, User, Menu, X } from "lucide-react"
@@ -14,8 +15,6 @@ const navItems = [
   { label: "Products", path: "/products" },
   { label: "My Listings", path: "/my-listings" },
   { label: "Add Product", path: "/add-product" },
-  { label: "Cart", path: "/cart" },
-  { label: "Purchases", path: "/purchases" },
   { label: "Profile", path: "/profile" },
 ]
 
@@ -26,7 +25,7 @@ export default function Navbar() {
   const navigate = useNavigate()
   const { toast } = useToast()
   const currentPath = location.pathname
-  const { isLoggedIn, login, logout } = useAuth()
+  const { isLoggedIn, logout } = useAuth()
   const { getTotalItems } = useCart()
 
   const isActive = (path: string) => currentPath === path
@@ -73,6 +72,22 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
+            <Link
+              to="/cart"
+              className={cn(
+                "relative px-3 py-2 rounded-md text-sm font-medium transition-all duration-200",
+                isActive('/cart')
+                  ? "bg-primary text-primary-foreground"
+                  : "text-foreground hover:bg-accent hover:text-accent-foreground"
+              )}
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {getTotalItems() > 0 && (
+                <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+                  {getTotalItems()}
+                </Badge>
+              )}
+            </Link>
           </div>
 
           {/* Desktop Actions */}
@@ -96,7 +111,7 @@ export default function Navbar() {
               </Button>
             </Link>
             {isLoggedIn ? (
-              <Button variant="outline" size="sm" onClick={logout}>
+              <Button variant="outline" size="sm" onClick={handleLogout}>
                 Logout
               </Button>
             ) : (

@@ -100,21 +100,25 @@ const Signup = () => {
                     onChange={handleChange}
                     className="pl-10"
                     required
+                    pattern="^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,6}$"
+                    title="Please enter a valid email (e.g. name@example.com)"
                   />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-3 h-4 w-4                  text-muted-foreground" />
                   <Input
-                    id="password"
+                    id="password"    
                     type="password"
                     placeholder="••••••••"
                     value={formData.password}
                     onChange={handleChange}
                     className="pl-10"
                     required
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+  title="Password must be at least 8 characters long, with uppercase, lowercase, number, and special character."
                   />
                 </div>
               </div>

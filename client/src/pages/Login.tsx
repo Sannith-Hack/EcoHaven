@@ -26,6 +26,30 @@ const Login = () => {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
+    // Email regex: must contain @ and a valid domain
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(values.email)) {
+    toast({
+      title: "Invalid Email",
+      description: "Please enter a valid email (e.g. user@example.com).",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  // Password regex: min 8 chars, uppercase, lowercase, number, special char
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  if (!passwordRegex.test(values.password)) {
+    toast({
+      title: "Weak Password",
+      description:
+        "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
+      variant: "destructive",
+    });
+    return;
+  }
+
     setIsLoading(true);
 
     try {
@@ -77,6 +101,8 @@ const handleSubmit = async (e) => {
                     name="email"
                     onChange={handleChanges}
                     required
+                    pattern="^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$"
+                    title="Enter a valid email (e.g. user@example.com)"
                   />
                 </div>
               </div>
@@ -92,6 +118,8 @@ const handleSubmit = async (e) => {
                     name="password"
                     onChange={handleChanges}
                     required
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                    title="Password must have at least 8 characters, 1 uppercase, 1 lowercase, 1 number, and 1 special character"
                   />
                 </div>
               </div>

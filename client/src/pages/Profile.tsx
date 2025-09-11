@@ -1,3 +1,4 @@
+// EcoHaven-FireBase/client/src/pages/Profile.tsx
 // Profile.tsx
 
 import { useState, useEffect } from "react";
@@ -38,9 +39,11 @@ const Profile = () => {
         setUserProfile({
           name: userData.username,
           email: userData.email,
+          phone: userData.phone || "Phone not set",
           location: userData.location || "Location not set",
           joinDate: new Date(userData.join_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
           avatar: userData.profile_picture || "/placeholder.svg",
+          bio: userData.bio || "No bio set.",
           stats: {
             itemsSold: userData.ads_posted || 0,
             itemsBought: 0, // This data isn't in the provided table
@@ -63,7 +66,25 @@ const Profile = () => {
 
   // If not logged in or loading, handle the UI accordingly
   if (!isLoggedIn) {
-    return null; // Redirect is handled by the router
+     return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-eco-sage/20 p-4">
+        <Card className="max-w-md w-full text-center shadow-lg border-eco-green/20">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold text-eco-forest">You are in Guest Mode</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-muted-foreground">
+              You are currently browsing as a guest. To view your profile and manage your listings, please sign in.
+            </p>
+            <Link to="/login">
+              <Button variant="eco" className="w-full">
+                Sign In
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
   
   if (loading) {
@@ -110,10 +131,12 @@ const Profile = () => {
                     </div>
                   </div>
                 </div>
-                <Button variant="outline" size="sm">
-                  <Edit className="w-4 h-4 mr-2" />
-                  Edit Profile
-                </Button>
+                <Link to="/edit-profile">
+                  <Button variant="outline" size="sm">
+                    <Edit className="w-4 h-4 mr-2" />
+                    Edit Profile
+                  </Button>
+                </Link>
               </div>
             </CardHeader>
           </Card>
@@ -172,8 +195,17 @@ const Profile = () => {
                   <p className="text-foreground">{userProfile.email}</p>
                 </div>
                 <div>
+                  <label className="text-sm font-medium text-muted-foreground">Phone Number</label>
+                  <p className="text-foreground">{userProfile.phone}</p>
+                </div>
+                <div>
                   <label className="text-sm font-medium text-muted-foreground">Location</label>
                   <p className="text-foreground">{userProfile.location}</p>
+                </div>
+                <Separator />
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Bio</label>
+                  <p className="text-foreground">{userProfile.bio}</p>
                 </div>
               </CardContent>
             </Card>

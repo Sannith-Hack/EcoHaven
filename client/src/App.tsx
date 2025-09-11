@@ -1,3 +1,4 @@
+// EcoHaven-FireBase/client/src/App.tsx
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,6 +16,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import EditProfile from "./pages/EditProfile";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +40,7 @@ const App = () => (
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
                   <Route path="/profile" element={<Profile />} />
+                  <Route path="/edit-profile" element={<EditProfile />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
