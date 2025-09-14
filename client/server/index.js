@@ -9,7 +9,7 @@ import authRoutes from './routes/authRoutes.js'; // adjust path to your router f
 
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT;
 
 // ES Module equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);

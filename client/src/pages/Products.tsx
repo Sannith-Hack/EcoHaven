@@ -26,7 +26,7 @@ export default function Products() {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:3001/api/products');
+        const response = await fetch('http://localhost:3000/api/products');
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
@@ -92,7 +92,7 @@ export default function Products() {
                   description: product.description,
                   price: product.price,
                   category: product.category,
-                  image: `http://localhost:3001${product.image_url}`,
+                  image: `http://localhost:3000${product.image_url}`,
                   condition: "Excellent"
                 }}
                 onToggleFavorite={() => {}}
