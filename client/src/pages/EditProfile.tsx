@@ -33,7 +33,7 @@ const EditProfile = () => {
         if (!token) {
           throw new Error("No authentication token found.");
         }
-        const response = await axios.get('http://localhost:3000/auth/home', {
+        const response = await axios.get('http://localhost:3001/api/auth/home', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -42,7 +42,7 @@ const EditProfile = () => {
         setFormData({
           username: userData.username || "",
           email: userData.email || "",
-          phone: userData.mobile || "",
+          phone: userData.phone || "",
           location: userData.location || "",
           bio: userData.bio || "",
           profileImage: userData.profile_picture || "/placeholder.svg"
@@ -80,11 +80,11 @@ const EditProfile = () => {
         throw new Error("User not authenticated.");
       }
 
-      await axios.put("http://localhost:3000/auth/update-profile", {
+      await axios.put("http://localhost:3001/api/auth/update-profile", {
         username: formData.username,
-        mobile: formData.phone,
+        phone: formData.phone,
         location: formData.location,
-        bio: formData.bio
+        bio: formData.bio,
       }, {
         headers: {
           'Authorization': `Bearer ${token}`

@@ -29,7 +29,7 @@ const Profile = () => {
           return;
         }
 
-        const response = await axios.get('http://localhost:3000/auth/home', {
+        const response = await axios.get('http://localhost:3001/api/auth/home', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -46,8 +46,8 @@ const Profile = () => {
           bio: userData.bio || "No bio set.",
           stats: {
             itemsSold: userData.ads_posted || 0,
-            itemsBought: 0, // This data isn't in the provided table
-            favorites: 0, // This data isn't in the provided table
+            itemsBought: userData.itemsBought || 0, // This data isn't in the provided table
+            favorites: userData.favorites || 0, // This data isn't in the provided table
             rating: userData.rating || 0
           }
         });

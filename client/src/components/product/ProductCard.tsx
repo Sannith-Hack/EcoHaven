@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/enhanced-button"
 import { Badge } from "@/components/ui/badge"
 import { Heart, ShoppingCart } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { formatPrice } from "@/utils/priceFormatter"
 import { useAuth } from "@/contexts/AuthContext"
 import { useCart } from "@/contexts/CartContext"
 import { useToast } from "@/hooks/use-toast"
@@ -116,7 +115,7 @@ export default function ProductCard({
               {product.title}
             </h3>
             <span className="text-lg font-bold text-primary">
-              {formatPrice(product.price)}
+              ₹{product.price}
             </span>
           </div>
           

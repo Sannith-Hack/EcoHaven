@@ -22,8 +22,9 @@ router.post('/signup', async (req, res) => {
             [name, email,hashPassword])
         
         return res.status(201).json({message: "user created successfully"})
-    } catch(err) {
-        return res.status(500).json(err.message)
+    }  catch (err) {
+        console.error("Signup error:", err);   // full error
+        return res.status(500).json({ message: "Server error", error: err });
     }
 })
 
@@ -56,13 +57,45 @@ const verifyToken = async (req, res, next) => {
         if(!token) {
             return res.status(403).json({message: "No Token Provided"})
         }
-        const decoded = jwt.verify(token,"jwt-secret-key")
+        const decoded = jwt.verify(token, process.env.JWT_KEY);
         req.userId = decoded.id;
         next()
     }  catch(err) {
         return res.status(500).json({message: "server error"})
     }
 }
+
+router.put('/update-profile', verifyToken, async (req, res) => {
+    const { username, phone, location, bio } = req.body;
+    const userId = req.userId;
+
+    try {
+        const db = await connectToDatabase();
+
+        // Check if phone already exists for another user
+        if (phone) {
+            const [rows] = await db.query(
+                'SELECT id FROM users WHERE phone = ? AND id != ?',
+                [phone, userId]
+            );
+            if (rows.length > 0) {
+                return res.status(409).json({ message: "Phone number already in use" });
+            }
+        }
+
+        // Update user profile
+        await db.query(
+            'UPDATE users SET username = ?, phone = ?, location = ?, bio = ? WHERE id = ?',
+            [username, phone, location, bio, userId]
+        );
+
+        return res.status(200).json({ message: "Profile updated successfully" });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "An error occurred while updating the profile" });
+    }
+});
+
 
 router.get('/home', verifyToken, async (req, res) => {
     try {
@@ -79,4 +112,3 @@ router.get('/home', verifyToken, async (req, res) => {
 })
 
 export default router;
-

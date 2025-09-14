@@ -9,25 +9,45 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Leaf, Mail, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { Eye, EyeOff } from "lucide-react";
+
 
 const Login = () => {
   const [values, setValues] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+
+
 
   const navigate = useNavigate();
   const { toast } = useToast();
   const { login } = useAuth();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+    // Email regex: must contain @ and a valid domain
+  const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    // Password regex: min 8 chars, uppercase, lowercase, number, special char
 
-  const handleChanges = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
+  const handleChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value } = e.target;
+  setValues({ ...values, [name]: value });
+
+  if (name === "email") {
+    if (!emailRegex.test(value)) {
+      setEmailError("Enter a valid email (e.g. user@example.com)");
+    } else {
+      setEmailError("");
+    }
+  }
+};
 
 // Login.tsx
 
 const handleSubmit = async (e) => {
     e.preventDefault();
     // Email regex: must contain @ and a valid domain
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
   if (!emailRegex.test(values.email)) {
     toast({
       title: "Invalid Email",
@@ -37,23 +57,11 @@ const handleSubmit = async (e) => {
     return;
   }
 
-  // Password regex: min 8 chars, uppercase, lowercase, number, special char
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  if (!passwordRegex.test(values.password)) {
-    toast({
-      title: "Weak Password",
-      description:
-        "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
-      variant: "destructive",
-    });
-    return;
-  }
 
     setIsLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3000/auth/login", values);
+      const response = await axios.post("http://localhost:3001/api/auth/login", values);
 
       if (response.status === 201) {
         localStorage.setItem("token", response.data.token);
@@ -101,10 +109,11 @@ const handleSubmit = async (e) => {
                     name="email"
                     onChange={handleChanges}
                     required
-                    pattern="^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$"
-                    title="Enter a valid email (e.g. user@example.com)"
                   />
                 </div>
+                {emailError && (
+                  <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -112,16 +121,23 @@ const handleSubmit = async (e) => {
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="Enter Password"
                     className="pl-10"
                     name="password"
                     onChange={handleChanges}
                     required
-                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
-                    title="Password must have at least 8 characters, 1 uppercase, 1 lowercase, 1 number, and 1 special character"
                   />
+                  <button type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-2.5 text-muted-foreground hover:text-primary"
+                  >             
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
                 </div>
+                {passwordError && (
+                 <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+                )}
               </div>
             </CardContent>
 
