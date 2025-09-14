@@ -56,7 +56,7 @@ const AddProduct = () => {
     });
 
     try {
-      const response = await fetch('http://localhost:3001/api/products', {
+      const response = await fetch('http://localhost:3000/products', {
         method: 'POST',
         body: productData,
       });

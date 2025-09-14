@@ -22,14 +22,26 @@ export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
 
+// Products.tsx
+
+// Products.tsx
+
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:3001/api/products');
+        const response = await fetch('http://localhost:3000/products');
         if (response.ok) {
           const data = await response.json();
-          setProducts(data);
+
+          // This fixes both the ID (number -> string) and Price (string -> number)
+          const transformedData = data.map((product: any) => ({
+            ...product,
+            id: String(product.id),          // Convert ID to a string
+            price: parseFloat(product.price) // Convert price to a number
+          }));
+
+          setProducts(transformedData);
         }
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -92,7 +104,7 @@ export default function Products() {
                   description: product.description,
                   price: product.price,
                   category: product.category,
-                  image: `http://localhost:3001${product.image_url}`,
+                  image: `http://localhost:3000${product.image_url}`,
                   condition: "Excellent"
                 }}
                 onToggleFavorite={() => {}}

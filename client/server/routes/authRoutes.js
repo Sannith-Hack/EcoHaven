@@ -1,5 +1,5 @@
 import express from 'express'
-import {connectToDatabase} from '../lib/db.js'
+import db from '../lib/db.js';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
@@ -12,7 +12,6 @@ router.post('/signup', async (req, res) => {
     console.log(password);
 
     try {
-        const db = await connectToDatabase()
         const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email])
         if(rows.length > 0) {
             return res.status(409).json({message : "user already existed"})
@@ -31,7 +30,6 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     const {email, password} = req.body;
     try {
-        const db = await connectToDatabase()
         const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email])
         if(rows.length === 0) {
             return res.status(404).json({message : "user not existed"})
@@ -70,7 +68,6 @@ router.put('/update-profile', verifyToken, async (req, res) => {
     const userId = req.userId;
 
     try {
-        const db = await connectToDatabase();
 
         // Check if phone already exists for another user
         if (phone) {
@@ -99,7 +96,6 @@ router.put('/update-profile', verifyToken, async (req, res) => {
 
 router.get('/home', verifyToken, async (req, res) => {
     try {
-        const db = await connectToDatabase()
         const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [req.userId])
         if(rows.length === 0) {
             return res.status(404).json({message : "user not existed"})

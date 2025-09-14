@@ -1,12 +1,5 @@
-//Add your database
-import mysql2 from 'mysql2/promise';
-
-const pool=mysql2.createPool({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: process.env.DB_NAME
-});
+// lib/dbUtils.js
+import pool from './db.js'; // Import the shared pool
 
 const userTableQuery = `CREATE TABLE IF NOT EXISTS users (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -27,13 +20,17 @@ const userTableQuery = `CREATE TABLE IF NOT EXISTS users (
     bio VARCHAR(255)
 );`;
 
-const postTableQuery = `CREATE TABLE IF NOT EXISTS posts (
+const productTableQuery = `CREATE TABLE IF NOT EXISTS products (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);`;
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    category VARCHAR(255),
+    price DECIMAL(10,2),
+    image_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+`;
 
 const createTable = async (tableName, query) => {
   try {
@@ -41,13 +38,15 @@ const createTable = async (tableName, query) => {
     console.log(`${tableName} table created or already exists`);
   } catch (error) {
     console.log(`Error creating ${tableName}`, error);
+    throw error;
   }
 };
 
 const createAllTable = async () => {
   try {
     await createTable("Users", userTableQuery);
-    //await createTable("Posts", postTableQuery);
+    // Corrected "Porduct" to "Products" for accurate logging
+    await createTable("Products", productTableQuery);
     console.log("All tables created successfully!!");
   } catch (error) {
     console.log("Error creating tables", error);
