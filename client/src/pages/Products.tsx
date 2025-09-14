@@ -30,7 +30,11 @@ export default function Products() {
     const fetchProducts = async () => {
       setLoading(true);
       try {
+<<<<<<< HEAD
         const response = await fetch('http://localhost:3000/products');
+=======
+        const response = await fetch('http://localhost:3000/api/products');
+>>>>>>> f4166b0a8760816cd273e47d9e80f7cea9536716
         if (response.ok) {
           const data = await response.json();
 

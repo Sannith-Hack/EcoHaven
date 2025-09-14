@@ -7,12 +7,18 @@ import createAllTable from './lib/dbUtils.js';
 import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js'; // ✅ Import the new product router
 
+<<<<<<< HEAD
 const app = express()
 app.use(cors({
     origin: "*",
     methods: ["GET", "POST", "PUT"]
 }))
 const PORT = process.env.PORT || 3000;
+=======
+
+const app = express();
+const PORT = process.env.PORT;
+>>>>>>> f4166b0a8760816cd273e47d9e80f7cea9536716
 
 // ES Module equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);

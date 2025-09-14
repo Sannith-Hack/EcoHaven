@@ -61,7 +61,11 @@ const handleSubmit = async (e) => {
     setIsLoading(true);
 
     try {
+<<<<<<< HEAD
       const response = await axios.post("http://localhost:3000/auth/login", values);
+=======
+      const response = await axios.post("http://localhost:3000/api/auth/login", values);
+>>>>>>> f4166b0a8760816cd273e47d9e80f7cea9536716
 
       if (response.status === 201) {
         localStorage.setItem("token", response.data.token);

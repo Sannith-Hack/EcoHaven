@@ -89,7 +89,11 @@ const handleSubmit = async (e: React.FormEvent) => {
   setIsLoading(true);  // move this to the top
 
   try {
+<<<<<<< HEAD
     const response = await axios.post('http://localhost:3000/auth/signup', formData);
+=======
+    const response = await axios.post('http://localhost:3000/api/auth/signup', formData);
+>>>>>>> f4166b0a8760816cd273e47d9e80f7cea9536716
     console.log(response);
 
     toast({
