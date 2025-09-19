@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
 
 const AddProduct = () => {
   const { toast } = useToast();
@@ -29,61 +30,72 @@ const AddProduct = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isSubmitting) return;
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (isSubmitting) return;
 
-    if (!formData.name || !formData.description || !formData.category || !formData.price || !image) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields and upload an image",
-        variant: "destructive",
-      });
-      return;
-    }
+  if (!formData.name || !formData.description || !formData.category || !formData.price || !image) {
+    toast({
+      title: "Error",
+      description: "Please fill in all fields and upload an image",
+      variant: "destructive",
+    });
+    return;
+  }
 
+  setIsSubmitting(true);
+  toast({
+    title: "Adding Product...",
+    description: "Please wait while we add your product.",
+  });
+
+  try {
+    const token = localStorage.getItem("token");
+    // ✅ Fetch logged-in user first
+    const res = await axios.get("http://localhost:3000/auth/home", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const userData = res.data.user;
+
+    // ✅ Now prepare product data with username
     const productData = new FormData();
     productData.append("name", formData.name);
+    productData.append("username", userData.username);
     productData.append("description", formData.description);
     productData.append("category", formData.category);
     productData.append("price", formData.price);
     productData.append("image", image);
 
-    setIsSubmitting(true);
-    toast({
-      title: "Adding Product...",
-      description: "Please wait while we add your product.",
+    // ✅ Use axios for posting
+    const response =await axios.post("http://localhost:3000/products", productData, {
+      headers: { Authorization: `Bearer ${token}` },
     });
 
-    try {
-      const response = await fetch('http://localhost:3000/products', {
-        method: 'POST',
-        body: productData,
-      });
+    toast({
+      title: "Success!",
+      description: "Product added successfully",
+    });
 
-      if (!response.ok) {
-        throw new Error('Failed to add product');
-      }
+    setFormData({
+      name: "",
+      description: "",
+      category: "",
+      price: "",
+    });
+    setImage(null);
+    navigate("/products");
+  } catch (error) {
+    console.error("Submission error:", error);
+    toast({
+      title: "Error",
+      description: "Failed to add product. Please try again.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
-      toast({
-        title: "Success!",
-        description: "Product added successfully",
-      });
-
-      setFormData({ name: "", description: "", category: "", price: "" });
-      setImage(null);
-      navigate('/products');
-    } catch (error) {
-      console.error('Submission error:', error);
-      toast({
-        title: "Error",
-        description: "Failed to add product. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
