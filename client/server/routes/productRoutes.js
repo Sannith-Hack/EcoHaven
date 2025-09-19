@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', upload.single('image'), async (req, res) => {
-    const { name, description, category, price } = req.body;
+    const { name,username, description, category, price } = req.body;
     const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
     const parsedPrice = parseFloat(price);
 
@@ -39,10 +39,10 @@ router.post('/', upload.single('image'), async (req, res) => {
     try {
         // Use the pool directly to insert into the database
         const [results] = await db.query(
-            'INSERT INTO products (name, description, category, price, image_url) VALUES (?, ?, ?, ?, ?)',
-            [name, description, category, parsedPrice, imageUrl]
+            'INSERT INTO products (name,username,description, category, price, image_url) VALUES (?, ?, ?, ?, ?, ?)',
+            [name,username,description, category, parsedPrice, imageUrl]
         );
-        res.status(201).json({ id: results.insertId, name, description, category, price: parsedPrice, imageUrl });
+        res.status(201).json({ id: results.insertId, name,username, description, category, price: parsedPrice, imageUrl });
     } catch (err) {
         console.error("Error adding product:", err);
         return res.status(500).json({ error: "Server error" });
