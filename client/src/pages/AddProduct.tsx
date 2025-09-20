@@ -60,7 +60,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     // ✅ Now prepare product data with username
     const productData = new FormData();
     productData.append("name", formData.name);
-    productData.append("username", userData.username);
+    productData.append("userid", userData.id);
     productData.append("description", formData.description);
     productData.append("category", formData.category);
     productData.append("price", formData.price);
