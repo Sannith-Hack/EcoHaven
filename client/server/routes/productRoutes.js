@@ -40,7 +40,7 @@ router.post('/', upload.single('image'), async (req, res) => {
         // Use the pool directly to insert into the database
         const [results] = await db.query(
             'INSERT INTO products (name,userid,description, category, price, image_url) VALUES (?, ?, ?, ?, ?, ?)',
-            [name,username,description, category, parsedPrice, imageUrl]
+            [name,userid,description, category, parsedPrice, imageUrl]
         );
         res.status(201).json({ id: results.insertId, name,userid, description, category, price: parsedPrice, imageUrl });
     } catch (err) {

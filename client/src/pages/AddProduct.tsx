@@ -15,6 +15,7 @@ const AddProduct = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
+    userid:"",
     description: "",
     category: "",
     price: "",
@@ -78,6 +79,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     setFormData({
       name: "",
+      userid:"",
       description: "",
       category: "",
       price: "",
